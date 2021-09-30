@@ -26,13 +26,13 @@ struct CounterView: View {
                         var newHeight = value.translation.height * 0.75
                         
                         if self.labelOffset.width >= labelOffsetXLimit {
-                            newWidth = labelOffsetXLimit
+                            newWidth = value.translation.width * 0.55
                         } else if self.labelOffset.width <= -labelOffsetXLimit {
-                            newWidth = -labelOffsetXLimit
+                            newWidth = value.translation.width * 0.55
                         }
                         
                         if self.labelOffset.height >= labelOffsetYLimit {
-                            newHeight = labelOffsetYLimit
+                            newHeight = value.translation.height * 0.55
                         } else if value.translation.height < 0 {
                             newHeight = 0
                         }
@@ -44,12 +44,14 @@ struct CounterView: View {
                             )
                         }
                     }
-                    .onEnded { _ in
-                        if draggingDirection == .right {
+                    .onEnded { value in
+                        let startZone: CGFloat = 20
+                        
+                        if draggingDirection == .right &&  value.translation.width > startZone {
                             self.increase()
-                        } else if draggingDirection == .left {
+                        } else if draggingDirection == .left &&  value.translation.width < -startZone {
                             self.decrease()
-                        } else if draggingDirection == .down {
+                        } else if draggingDirection == .down &&  value.translation.height > startZone {
                             self.reset()
                         }
                         
@@ -88,9 +90,7 @@ struct CounterView: View {
             .padding(.horizontal, spacing)
             .background(
                 RoundedRectangle(cornerRadius: controlsContainerCornerRadius)
-                    .fill(
-                        Color.controlsBackground
-                    )
+                    .fill(Color.controlsBackground)
                     .overlay(
                         Color.black.opacity(controlsContainerOpacity)
                             .clipShape(RoundedRectangle(cornerRadius: controlsContainerCornerRadius))
@@ -192,16 +192,14 @@ private extension CounterView {
 private extension CounterView {
     private func findDirection(translation: CGSize) {
         withAnimation {
-            if self.draggingDirection == .none {
-                if translation.height <= 30 {
-                    if translation.width > 0 {
-                        self.draggingDirection = .right
-                    } else if translation.width < 0 {
-                        self.draggingDirection = .left
-                    }
-                } else {
-                    self.draggingDirection = .down
+            if translation.height <= 30 {
+                if translation.width > 0 {
+                    self.draggingDirection = .right
+                } else if translation.width < 0 {
+                    self.draggingDirection = .left
                 }
+            } else if self.draggingDirection == .none {
+                self.draggingDirection = .down
             }
         }
     }
