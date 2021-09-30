@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		824CA68D2705CCDA00C89B8F /* ControlButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824CA68C2705CCDA00C89B8F /* ControlButtonStyle.swift */; };
 		82F39C2227043CDF00840632 /* Tally_CounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F39C2127043CDF00840632 /* Tally_CounterApp.swift */; };
 		82F39C2427043CDF00840632 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F39C2327043CDF00840632 /* ContentView.swift */; };
 		82F39C2627043CE500840632 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82F39C2527043CE500840632 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		824CA68C2705CCDA00C89B8F /* ControlButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlButtonStyle.swift; sourceTree = "<group>"; };
 		82F39C1E27043CDF00840632 /* Tally Counter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tally Counter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		82F39C2127043CDF00840632 /* Tally_CounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tally_CounterApp.swift; sourceTree = "<group>"; };
 		82F39C2327043CDF00840632 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -37,6 +39,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		824CA68B2705CCBE00C89B8F /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				824CA68C2705CCDA00C89B8F /* ControlButtonStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
 		82F39C1527043CDF00840632 = {
 			isa = PBXGroup;
 			children = (
@@ -56,6 +66,7 @@
 		82F39C2027043CDF00840632 /* Tally Counter */ = {
 			isa = PBXGroup;
 			children = (
+				824CA68B2705CCBE00C89B8F /* Styles */,
 				82F39C322704452E00840632 /* Extensions */,
 				82F39C2127043CDF00840632 /* Tally_CounterApp.swift */,
 				82F39C2327043CDF00840632 /* ContentView.swift */,
@@ -152,6 +163,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				824CA68D2705CCDA00C89B8F /* ControlButtonStyle.swift in Sources */,
 				82F39C2427043CDF00840632 /* ContentView.swift in Sources */,
 				82F39C342704454900840632 /* Color.swift in Sources */,
 				82F39C2227043CDF00840632 /* Tally_CounterApp.swift in Sources */,
