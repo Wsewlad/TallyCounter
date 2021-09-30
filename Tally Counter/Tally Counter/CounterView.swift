@@ -8,27 +8,92 @@
 import SwiftUI
 
 struct CounterView: View {
-    @State var count: Int = 0
-    
+    private enum Direction {
+        case none, left, right, down
+    }
     var width: CGFloat = 300
     
+    @State var count: Int = 0
+    @State private var labelOffset: CGSize = .zero
+    @State private var draggingDirection: Direction = .none
+    
     var body: some View {
-        ZStack {
+        let dragGesture = DragGesture()
+                    .onChanged { value in
+                        if self.draggingDirection == .none {
+                            if value.translation.height <= 30 {
+                                if value.translation.width > 0 {
+                                    self.draggingDirection = .right
+                                } else if value.translation.width < 0 {
+                                    self.draggingDirection = .left
+                                }
+                            } else {
+                                self.draggingDirection = .down
+                            }
+                        }
+                        
+                        let widthLimit = width / 3 + spacing
+                        let heightLimit = heigth / 1.2
+                        
+                        var newWidth = value.translation.width * 0.75
+                        var newHeight = value.translation.height * 0.75
+                        
+                        if self.labelOffset.width >= widthLimit {
+                            newWidth = widthLimit
+                        } else if self.labelOffset.width <= -widthLimit {
+                            newWidth = -widthLimit
+                        }
+                        
+                        if self.labelOffset.height >= heightLimit {
+                            newHeight = heightLimit
+                        } else if value.translation.height < 0 {
+                            newHeight = 0
+                        }
+                        
+                        withAnimation {
+                            self.labelOffset = .init(
+                                width: self.draggingDirection == .down ? 0 : newWidth,
+                                height: self.draggingDirection == .down ? newHeight : 0
+                            )
+                        }
+                    }
+                    .onEnded { _ in
+                        if draggingDirection == .right {
+                            self.increase()
+                        } else if draggingDirection == .left {
+                            self.decrease()
+                        } else if draggingDirection == .down {
+                            self.reset()
+                        }
+                        
+                        withAnimation(.interpolatingSpring(stiffness: 350, damping: 20)) {
+                            self.labelOffset = .zero
+                            self.draggingDirection = .none
+                        }
+                    }
+        
+        return ZStack {
             HStack(spacing: spacing) {
                 ControlButton(
                     systemName: "minus",
-                    size: controlFrameSize
-                ) { decrease() }
+                    size: controlFrameSize,
+                    opacity: 1 - controlsOpacity,
+                    action: decrease
+                )
                 
                 ControlButton(
                     systemName: "xmark",
-                    size: controlFrameSize
-                ) {}
+                    size: controlFrameSize,
+                    opacity: controlsOpacity
+                )
+                .allowsHitTesting(false)
                 
                 ControlButton(
                     systemName: "plus",
-                    size: controlFrameSize
-                ) { increase() }
+                    size: controlFrameSize,
+                    opacity: 1 - controlsOpacity,
+                    action: increase
+                )
             }
             .padding(.horizontal, spacing)
             .background(
@@ -36,6 +101,8 @@ struct CounterView: View {
                     .fill(Color.controlsBackground)
                     .frame(width: width, height: heigth)
             )
+            .offset(viewOffset)
+            .animation(.interpolatingSpring(stiffness: 350, damping: 25))
             
             Text("\(count)")
                 .foregroundColor(.white)
@@ -44,11 +111,12 @@ struct CounterView: View {
                 .clipShape(Circle())
                 .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 5)
                 .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
-                .animation(nil)
                 .contentShape(Circle())
+                .offset(self.labelOffset)
                 .onTapGesture {
                     increase()
                 }
+                .gesture(dragGesture)
         }
     }
 }
@@ -57,7 +125,8 @@ struct CounterView: View {
 struct ControlButton: View {
     var systemName: String
     var size: CGFloat
-    var action: () -> Void
+    var opacity: Double
+    var action: () -> Void = {}
     
     @State private var color: Color = .controls
     
@@ -74,6 +143,7 @@ struct ControlButton: View {
         }
         .buttonStyle(ControlButtonStyle(systemName: systemName, size: size))
         .contentShape(Circle())
+        .opacity(opacity)
     }
 }
 
@@ -124,8 +194,20 @@ private extension CounterView {
     var controlFrameSize: CGFloat {
         width / 4.2
     }
+    
     var radius: CGFloat {
         width / 4.9
+    }
+    
+    private var viewOffset: CGSize {
+        .init(
+            width: labelOffset.width / 6,
+            height: labelOffset.height / 6
+        )
+    }
+    
+    var controlsOpacity: Double {
+        Double(labelOffset.height) / Double((heigth / 1.2))
     }
 }
 
@@ -133,24 +215,18 @@ private extension CounterView {
 private extension CounterView {
     func decrease() {
         if self.count != 0 {
-            withAnimation {
-                self.count -= 1
-            }
+            self.count -= 1
         }
     }
     
     func increase() {
         if self.count < 999 {
-            withAnimation {
-                self.count += 1
-            }
+            self.count += 1
         }
     }
     
     func reset() {
-        withAnimation {
-            self.count = 0
-        }
+        self.count = 0
     }
 }
 
