@@ -87,8 +87,14 @@ struct CounterView: View {
             }
             .padding(.horizontal, spacing)
             .background(
-                RoundedRectangle(cornerRadius: controlsContainerRadius)
-                    .fill(Color.controlsBackground)
+                RoundedRectangle(cornerRadius: controlsContainerCornerRadius)
+                    .fill(
+                        Color.controlsBackground
+                    )
+                    .overlay(
+                        Color.black.opacity(controlsContainerOpacity)
+                            .clipShape(RoundedRectangle(cornerRadius: controlsContainerCornerRadius))
+                    )
                     .frame(width: controlsContainerWidth, height: controlsContainerHeigth)
             )
             .offset(controlsContainerOffset)
@@ -99,7 +105,7 @@ struct CounterView: View {
                 .frame(width: labelSize, height: labelSize)
                 .background(Color.labelBackground)
                 .clipShape(Circle())
-                .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 5)
+                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 5)
                 .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
                 .contentShape(Circle())
                 .offset(self.labelOffset)
@@ -137,32 +143,49 @@ struct ControlButton: View {
 
 //MARK: - Computed Properties
 private extension CounterView {
+    var defaultControlsOpacity: Double { 0.4 }
     var spacing: CGFloat { controlsContainerWidth / 10 }
     
     var controlsContainerHeigth: CGFloat { controlsContainerWidth / 2.5 }
-    var controlsContainerRadius: CGFloat { controlsContainerWidth / 4.9 }
+    var controlsContainerCornerRadius: CGFloat { controlsContainerWidth / 4.9 }
     var controlsContainerOffset: CGSize {
         .init(
             width: labelOffset.width / 6,
             height: labelOffset.height / 6
         )
     }
-    var controlsOpacity: Double {
-        Double(labelOffset.height) / Double((controlsContainerHeigth / 1.2))
+    var controlsContainerOpacity: Double {
+        controlsOpacity * 0.2 + abs(labelOffsetXInPercents) * 0.25
     }
+    var controlsOpacity: Double { labelOffsetYInPercents }
     
     var controlFrameSize: CGFloat { controlsContainerWidth / 4.2 }
+    
     var leftControlOpacity: Double {
-        labelOffset.width < 0 ? -Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + 0.4 : 0.4 - controlsOpacity
+        if labelOffset.width < 0 {
+            return -Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + defaultControlsOpacity
+        } else {
+            return defaultControlsOpacity - controlsOpacity - labelOffsetXInPercents / 3.5
+        }
     }
     var rightControlOpacity: Double {
-        labelOffset.width > 0 ? Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + 0.4 : 0.4 - controlsOpacity
+        if labelOffset.width > 0 {
+            return Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + defaultControlsOpacity
+        } else {
+            return defaultControlsOpacity - controlsOpacity + labelOffsetXInPercents / 3.5
+        }
     }
     
     var labelSize: CGFloat { controlsContainerWidth / 3 }
     var labelFontSize: CGFloat { labelSize / 2.5 }
     var labelOffsetXLimit: CGFloat { controlsContainerWidth / 3 + spacing }
     var labelOffsetYLimit: CGFloat { controlsContainerHeigth / 1.2 }
+    var labelOffsetXInPercents: Double {
+        Double(labelOffset.width / labelOffsetXLimit)
+    }
+    var labelOffsetYInPercents: Double {
+        Double(labelOffset.height / labelOffsetYLimit)
+    }
 }
 
 //MARK: - Helper methods
