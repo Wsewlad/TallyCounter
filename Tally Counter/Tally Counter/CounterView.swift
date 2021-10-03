@@ -21,7 +21,7 @@ struct CounterView: View {
         let dragGesture = DragGesture()
                     .onChanged { value in
                         findDirection(translation: value.translation)
-                        
+
                         var newWidth = value.translation.width * 0.75
                         var newHeight = value.translation.height * 0.75
                         
@@ -32,7 +32,7 @@ struct CounterView: View {
                         }
                         
                         if self.labelOffset.height >= labelOffsetYLimit {
-                            newHeight = value.translation.height * 0.55
+                            newHeight = newHeight *  0.55
                         } else if value.translation.height < 0 {
                             newHeight = 0
                         }
@@ -45,7 +45,7 @@ struct CounterView: View {
                         }
                     }
                     .onEnded { value in
-                        let startZone: CGFloat = 20
+                        let startZone: CGFloat = 30
                         
                         if draggingDirection == .right &&  value.translation.width > startZone {
                             self.increase()
@@ -219,6 +219,12 @@ private extension CounterView {
 struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
+            
+            Image("logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(24)
+            
             CounterView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

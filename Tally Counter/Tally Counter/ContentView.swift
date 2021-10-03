@@ -10,6 +10,11 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
+            Image("logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(24)
+            
             CounterView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
