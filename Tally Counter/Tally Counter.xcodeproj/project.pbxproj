@@ -13,7 +13,7 @@
 		82F39C2427043CDF00840632 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F39C2327043CDF00840632 /* ContentView.swift */; };
 		82F39C2627043CE500840632 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82F39C2527043CE500840632 /* Assets.xcassets */; };
 		82F39C2927043CE500840632 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82F39C2827043CE500840632 /* Preview Assets.xcassets */; };
-		82F39C312704442200840632 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F39C302704442200840632 /* CounterView.swift */; };
+		82F39C312704442200840632 /* TallyCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F39C302704442200840632 /* TallyCounter.swift */; };
 		82F39C342704454900840632 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F39C332704454900840632 /* Color.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,7 +26,7 @@
 		82F39C2527043CE500840632 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		82F39C2827043CE500840632 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		82F39C2A27043CE500840632 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		82F39C302704442200840632 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
+		82F39C302704442200840632 /* TallyCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TallyCounter.swift; sourceTree = "<group>"; };
 		82F39C332704454900840632 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,7 +52,7 @@
 		824CA68E270A735800C89B8F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				82F39C302704442200840632 /* CounterView.swift */,
+				82F39C302704442200840632 /* TallyCounter.swift */,
 				824CA68F270A738D00C89B8F /* ControlButton.swift */,
 			);
 			path = Views;
@@ -179,7 +179,7 @@
 				82F39C342704454900840632 /* Color.swift in Sources */,
 				824CA690270A738D00C89B8F /* ControlButton.swift in Sources */,
 				82F39C2227043CDF00840632 /* Tally_CounterApp.swift in Sources */,
-				82F39C312704442200840632 /* CounterView.swift in Sources */,
+				82F39C312704442200840632 /* TallyCounter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

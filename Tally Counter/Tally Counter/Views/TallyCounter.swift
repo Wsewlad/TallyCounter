@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CounterView: View {
+struct TallyCounter: View {
     private enum Direction {
         case none, left, right, down
     }
@@ -22,56 +22,57 @@ struct CounterView: View {
     
     var body: some View {
         let dragGesture = DragGesture()
-                    .onChanged { value in
-                        findDirection(translation: value.translation)
+            .onChanged { value in
+                findDirection(translation: value.translation)
 
-                        var newWidth = value.translation.width * 0.75
-                        var newHeight = value.translation.height * 0.75
-                        
-                        if self.labelOffset.width >= labelOffsetXLimit {
-                            newWidth = value.translation.width * 0.55
-                        } else if self.labelOffset.width <= -labelOffsetXLimit {
-                            newWidth = value.translation.width * 0.55
-                        }
-                        
-                        if self.labelOffset.height >= labelOffsetYLimit {
-                            newHeight = newHeight *  0.55
-                        } else if value.translation.height < 0 {
-                            newHeight = 0
-                        }
-                        
-                        withAnimation {
-                            self.labelOffset = .init(
-                                width: self.draggingDirection == .down ? 0 : newWidth,
-                                height: self.draggingDirection == .down ? newHeight : 0
-                            )
-                        }
-                        
-                        var newAmount = Int(labelOffsetXInPercents * 100)
-                        
-                        if newAmount < 0 && count + newAmount < minValue {
-                            newAmount = -(count % newAmount)
-                        } else if count + newAmount > maxValue {
-                            newAmount = maxValue - count
-                        }
-                        self.amount = newAmount
-                    }
-                    .onEnded { value in
-                        if draggingDirection == .right {
-                            self.increase()
-                        } else if draggingDirection == .left {
-                            self.decrease()
-                        } else if draggingDirection == .down {
-                            self.reset()
-                        }
-                        
-                        self.amount = 0
-                        
-                        withAnimation {
-                            self.labelOffset = .zero
-                            self.draggingDirection = .none
-                        }
-                    }
+                var newWidth = value.translation.width * 0.75
+                var newHeight = value.translation.height * 0.75
+                
+                if self.labelOffset.width >= labelOffsetXLimit {
+                    newWidth = value.translation.width * 0.55
+                } else if self.labelOffset.width <= -labelOffsetXLimit {
+                    newWidth = value.translation.width * 0.55
+                }
+                
+                if self.labelOffset.height >= labelOffsetYLimit {
+                    newHeight = newHeight *  0.55
+                } else if value.translation.height < 0 {
+                    newHeight = 0
+                }
+                
+                withAnimation {
+                    self.labelOffset = .init(
+                        width: self.draggingDirection == .down ? 0 : newWidth,
+                        height: self.draggingDirection == .down ? newHeight : 0
+                    )
+                }
+                
+                var newAmount = Int(labelOffsetXInPercents * 100)
+                
+                if newAmount < 0 && count + newAmount < minValue {
+                    newAmount = -(count % newAmount)
+                } else if count + newAmount > maxValue {
+                    newAmount = maxValue - count
+                }
+                
+                self.amount = newAmount
+            }
+            .onEnded { value in
+                if draggingDirection == .right {
+                    self.increase()
+                } else if draggingDirection == .left {
+                    self.decrease()
+                } else if draggingDirection == .down {
+                    self.reset()
+                }
+                
+                self.amount = 0
+                
+                withAnimation {
+                    self.labelOffset = .zero
+                    self.draggingDirection = .none
+                }
+            }
         
         return ZStack {
             controlsContainerView
@@ -85,7 +86,7 @@ struct CounterView: View {
 }
 
 //MARK: - Controls Container
-private extension CounterView {
+private extension TallyCounter {
     var controlsContainerView: some View {
         HStack(spacing: spacing) {
             ControlButton(
@@ -127,7 +128,7 @@ private extension CounterView {
 }
 
 //MARK: - Label View
-private extension CounterView {
+private extension TallyCounter {
     var labelView: some View {
         Text("\(count)")
             .foregroundColor(.white)
@@ -160,7 +161,7 @@ private extension CounterView {
 }
 
 //MARK: - Computed Properties
-private extension CounterView {
+private extension TallyCounter {
     var defaultControlsOpacity: Double { 0.4 }
     var spacing: CGFloat { controlsContainerWidth / 10 }
     
@@ -207,7 +208,7 @@ private extension CounterView {
 }
 
 //MARK: - Helper methods
-private extension CounterView {
+private extension TallyCounter {
     private func findDirection(translation: CGSize) {
         withAnimation {
             if translation.height <= 30 {
@@ -224,7 +225,7 @@ private extension CounterView {
 }
 
 //MARK: - Operations
-private extension CounterView {
+private extension TallyCounter {
     func decrease() {
         if self.count != minValue { self.count -= abs(self.amount == 0 ? 1 : self.amount) }
     }
@@ -234,7 +235,7 @@ private extension CounterView {
     func reset() { self.count = 0 }
 }
 
-struct CounterView_Previews: PreviewProvider {
+struct TallyCounter_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Image("logo")
@@ -242,7 +243,7 @@ struct CounterView_Previews: PreviewProvider {
                 .aspectRatio(contentMode: .fit)
                 .padding(34)
             
-            CounterView()
+            TallyCounter()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.screenBackground.edgesIgnoringSafeArea(.vertical))

@@ -18,7 +18,7 @@ struct ContentView: View {
                 .padding(34)
                 .animation(.interpolatingSpring(stiffness: 100, damping: 15))
             
-            CounterView()
+            TallyCounter()
                 .padding(.bottom, UIScreen.main.bounds.height / 3)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
