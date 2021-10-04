@@ -1,5 +1,5 @@
 # TallyCounter
-![Author](https://img.shields.io/badge/author-Vladyslav%20Fil-brightgreen.svg)](https://github.com/Wsewlad)
+[![Author](https://img.shields.io/badge/author-Vladyslav%20Fil-brightgreen.svg)](https://github.com/Wsewlad)
 ![Xcode 12.5](https://img.shields.io/badge/Xcode-12.5-blue.svg)
 ![Swift 5.1](https://img.shields.io/badge/Swift-5.1-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-black.svg)
