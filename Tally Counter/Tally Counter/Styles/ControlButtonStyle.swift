@@ -33,6 +33,7 @@ struct ControlButtonStyle: ButtonStyle {
                 }
                 .frame(width: size, height: size)
                 .opacity(configuration.isPressed ? 1 : 0)
+                .animation(.linear(duration: 0.1))
             )
             .font(.system(size: 60, weight: .thin, design: .rounded))
         }

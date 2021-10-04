@@ -12,10 +12,13 @@ struct CounterView: View {
         case none, left, right, down
     }
     var controlsContainerWidth: CGFloat = 300
+    var minValue = 0
+    var maxValue = 999
     
     @State var count: Int = 0
     @State private var labelOffset: CGSize = .zero
     @State private var draggingDirection: Direction = .none
+    @State private var amount: Int = 0
     
     var body: some View {
         let dragGesture = DragGesture()
@@ -43,101 +46,116 @@ struct CounterView: View {
                                 height: self.draggingDirection == .down ? newHeight : 0
                             )
                         }
+                        
+                        var newAmount = Int(labelOffsetXInPercents * 100)
+                        
+                        if newAmount < 0 && count + newAmount < minValue {
+                            newAmount = -(count % newAmount)
+                        } else if count + newAmount > maxValue {
+                            newAmount = maxValue - count
+                        }
+                        self.amount = newAmount
                     }
                     .onEnded { value in
-                        let startZone: CGFloat = 30
-                        
-                        if draggingDirection == .right &&  value.translation.width > startZone {
+                        if draggingDirection == .right {
                             self.increase()
-                        } else if draggingDirection == .left &&  value.translation.width < -startZone {
+                        } else if draggingDirection == .left {
                             self.decrease()
-                        } else if draggingDirection == .down &&  value.translation.height > startZone {
+                        } else if draggingDirection == .down {
                             self.reset()
                         }
                         
-                        withAnimation(.interpolatingSpring(stiffness: 350, damping: 20)) {
+                        self.amount = 0
+                        
+                        withAnimation {
                             self.labelOffset = .zero
                             self.draggingDirection = .none
                         }
                     }
         
         return ZStack {
-            HStack(spacing: spacing) {
-                ControlButton(
-                    systemName: "minus",
-                    size: controlFrameSize,
-                    isActive: draggingDirection == .left,
-                    opacity: leftControlOpacity,
-                    action: decrease
-                )
-                
-                ControlButton(
-                    systemName: "xmark",
-                    size: controlFrameSize,
-                    isActive: draggingDirection == .down,
-                    opacity: controlsOpacity
-                )
-                .allowsHitTesting(false)
-                
-                ControlButton(
-                    systemName: "plus",
-                    size: controlFrameSize,
-                    isActive: draggingDirection == .right,
-                    opacity: rightControlOpacity,
-                    action: increase
-                )
-            }
-            .padding(.horizontal, spacing)
-            .background(
-                RoundedRectangle(cornerRadius: controlsContainerCornerRadius)
-                    .fill(Color.controlsBackground)
-                    .overlay(
-                        Color.black.opacity(controlsContainerOpacity)
-                            .clipShape(RoundedRectangle(cornerRadius: controlsContainerCornerRadius))
-                    )
-                    .frame(width: controlsContainerWidth, height: controlsContainerHeigth)
-            )
-            .offset(controlsContainerOffset)
-            .animation(.interpolatingSpring(stiffness: 350, damping: 25))
+            controlsContainerView
+                .animation(.interpolatingSpring(stiffness: 350, damping: 15))
             
-            Text("\(count)")
-                .foregroundColor(.white)
-                .frame(width: labelSize, height: labelSize)
-                .background(Color.labelBackground)
-                .clipShape(Circle())
-                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 5)
-                .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
-                .contentShape(Circle())
-                .offset(self.labelOffset)
-                .onTapGesture {
-                    increase()
-                }
+            labelView
+                .animation(.interpolatingSpring(stiffness: 350, damping: 20))
                 .gesture(dragGesture)
         }
     }
 }
 
-//MARK: - Control Button
-struct ControlButton: View {
-    var systemName: String
-    var size: CGFloat
-    var isActive: Bool
-    var opacity: Double
-    var action: () -> Void = {}
-    
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(size / 3.5)
-                .frame(width: size, height: size)
-                .foregroundColor(Color.white.opacity(opacity))
-                .background(Color.white.opacity(0.0000001))
-                .clipShape(Circle())
+//MARK: - Controls Container
+private extension CounterView {
+    var controlsContainerView: some View {
+        HStack(spacing: spacing) {
+            ControlButton(
+                systemName: "minus",
+                size: controlFrameSize,
+                isActive: draggingDirection == .left,
+                opacity: leftControlOpacity,
+                action: decrease
+            )
+            
+            ControlButton(
+                systemName: "xmark",
+                size: controlFrameSize,
+                isActive: draggingDirection == .down,
+                opacity: controlsOpacity
+            )
+            .allowsHitTesting(false)
+            
+            ControlButton(
+                systemName: "plus",
+                size: controlFrameSize,
+                isActive: draggingDirection == .right,
+                opacity: rightControlOpacity,
+                action: increase
+            )
         }
-        .buttonStyle(ControlButtonStyle(systemName: systemName, size: size))
-        .contentShape(Circle())
+        .padding(.horizontal, spacing)
+        .background(
+            RoundedRectangle(cornerRadius: controlsContainerCornerRadius)
+                .fill(Color.controlsBackground)
+                .overlay(
+                    Color.black.opacity(controlsContainerOpacity)
+                        .clipShape(RoundedRectangle(cornerRadius: controlsContainerCornerRadius))
+                )
+                .frame(width: controlsContainerWidth, height: controlsContainerHeigth)
+        )
+        .offset(controlsContainerOffset)
+    }
+}
+
+//MARK: - Label View
+private extension CounterView {
+    var labelView: some View {
+        Text("\(count)")
+            .foregroundColor(.white)
+            .frame(width: labelSize, height: labelSize)
+            .background(Color.labelBackground)
+            .clipShape(Circle())
+            .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 5)
+            .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
+            .contentShape(Circle())
+            .onTapGesture {
+                increase()
+            }
+            .overlay(
+                VStack {
+                    HStack {
+                        Spacer()
+                        if amount != 0 {
+                            Text("\(amount > 0 ? "+" : "")\(amount)")
+                        }
+                    }
+                    .foregroundColor(.white.opacity(0.6))
+                    .font(.system(size: labelFontSize / 2, weight: .semibold, design: .rounded))
+                    .animation(.interactiveSpring())
+
+                    Spacer()
+                }
+            )
+            .offset(self.labelOffset)
     }
 }
 
@@ -208,10 +226,10 @@ private extension CounterView {
 //MARK: - Operations
 private extension CounterView {
     func decrease() {
-        if self.count != 0 { self.count -= 1 }
+        if self.count != minValue { self.count -= abs(self.amount == 0 ? 1 : self.amount) }
     }
     func increase() {
-        if self.count < 999 { self.count += 1 }
+        if self.count < maxValue { self.count += self.amount == 0 ? 1 : self.amount }
     }
     func reset() { self.count = 0 }
 }
@@ -219,11 +237,10 @@ private extension CounterView {
 struct CounterView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            
             Image("logo")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .padding(24)
+                .padding(34)
             
             CounterView()
         }

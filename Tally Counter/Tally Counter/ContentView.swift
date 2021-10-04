@@ -10,12 +10,16 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
+            Spacer()
+            
             Image("logo")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .padding(24)
+                .padding(34)
+                .animation(.interpolatingSpring(stiffness: 100, damping: 15))
             
             CounterView()
+                .padding(.bottom, UIScreen.main.bounds.height / 3)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.screenBackground.edgesIgnoringSafeArea(.vertical))
