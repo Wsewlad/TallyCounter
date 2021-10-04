@@ -21,7 +21,6 @@ struct TallyCounter: View {
     @State private var amount: Int = 0
     
     var body: some View {
-        
         let dragGesture = DragGesture()
             .onChanged { value in
                 findDirection(translation: value.translation)
