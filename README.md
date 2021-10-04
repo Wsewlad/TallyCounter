@@ -9,7 +9,6 @@
 
 ### Inspired by [Ehsan Rahimi](https://dribbble.com/ehsancinematic) Tally Counter Micro-Interaction concept.
 <img src="https://gitlab.com/you-are-launched/design-concept-award/season-1/vladyslav-fil/-/raw/main/dribbble.gif" width="700px">
-![alt text](https://gitlab.com/you-are-launched/design-concept-award/season-1/vladyslav-fil/-/raw/main/dribbble.gif)
 
 ## Requirements
 * Xcode 12+
