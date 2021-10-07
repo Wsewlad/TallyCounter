@@ -9,7 +9,7 @@
 ![alt text](https://github.com/Wsewlad/TallyCounter/blob/main/TallyCounter.gif)
 
 ### Inspired by [Ehsan Rahimi](https://dribbble.com/ehsancinematic) Tally Counter Micro-Interaction concept.
-![alt text](https://github.com/Wsewlad/TallyCounter/edit/main/dribbble.gif)
+![alt text](https://github.com/Wsewlad/TallyCounter/blob/main/dribbble.gif)
 
 ## Requirements
 * Xcode 12+
