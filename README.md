@@ -6,10 +6,10 @@
 ![Contact](https://img.shields.io/badge/contact-wladyslawfil%40gmail.com-lightgrey.svg)
 
 ### Tally Counter interaction view implemented on SwiftUI.
-![alt text](https://gitlab.com/you-are-launched/design-concept-award/season-1/vladyslav-fil/-/raw/main/TallyCounter.gif)
+![alt text](https://github.com/Wsewlad/TallyCounter/blob/main/TallyCounter.gif)
 
 ### Inspired by [Ehsan Rahimi](https://dribbble.com/ehsancinematic) Tally Counter Micro-Interaction concept.
-![alt text](https://gitlab.com/you-are-launched/design-concept-award/season-1/vladyslav-fil/-/raw/main/dribbble.gif)
+![alt text](https://github.com/Wsewlad/TallyCounter/edit/main/dribbble.gif)
 
 ## Requirements
 * Xcode 12+
